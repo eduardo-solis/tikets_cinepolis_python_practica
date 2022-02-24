@@ -1,0 +1,59 @@
+{% extends 'plantilla.html' %}
+
+{% block content %}
+{% from '_macros.html' import render_field %}
+
+<h1>Venta boletos</h1>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Formulario de venta -->
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <form name="venta" action="" method="POST" novalidate>
+
+                        {{render_field(form.nombre, class='form-control')}}
+                        <br>
+                        {{render_field(form.cantidad_compradores, class='form-control')}}
+                        <br>
+                        <p class="card-text">Tarjeta de descuento</p>
+                        {% for field in form.tarjeta_descuento %}
+                            <div class="form-check">
+                                <tr>
+                                    <td>{{ field(class='form-check-input') }}</td>
+                                    <td>{{ field.label(class='form-check-label') }}</td>
+                                </tr>
+                            </div>
+                        {% endfor %}
+                        <br>
+                        {{render_field(form.cantidad_tikets, class='form-control')}}
+                        <br>
+                        {{render_field(form.fecha_venta, class='form-control')}}
+
+                        <!-- Botón para enviar el formulario -->
+                        <div class="row mt-3">
+                            <button type="submit" class="btn btn-primary">Realizar venta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cantidad a cobrar -->
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Cantidad a cobrar</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-success" style="font-size: 50px; font-weight: bold;">$ 00.00 MX</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
