@@ -12,7 +12,7 @@ class Venta:
             subtotal = self.tikets * 12
             cantidad_pagar = subtotal - (subtotal * descuento)
             
-            return cantidad_pagar
+            return str(cantidad_pagar)
         else:
             return 'No se pudo realizar la venta'
     

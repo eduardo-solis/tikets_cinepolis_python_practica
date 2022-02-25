@@ -6,6 +6,30 @@
 <h1>Venta boletos</h1>
 
 <div class="container-fluid">
+
+    <!-- Uso del mensaje flash -->
+    <div class="row">
+        {% with mensajes = get_flashed_messages() %}
+            {% if mensajes %}
+                {% for mensaje in mensajes %}
+
+                    {% if mensaje.lower() == 'venta realizada exitosamente' %}
+                    <div class="alert alert-success" role="alert">
+                        {{mensaje}}
+                    </div>
+                    {% endif %}
+
+                    {% if mensaje.lower() != 'venta realizada exitosamente' %}
+                    <div class="alert alert-danger" role="alert">
+                        {{mensaje}}
+                    </div>
+                    {% endif %}
+
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
     <div class="row">
 
         <!-- Formulario de venta -->
@@ -14,7 +38,11 @@
                 <div class="card-body">
                     <form name="venta" action="" method="POST" novalidate>
 
-                        {{render_field(form.nombre, class='form-control')}}
+                        <!-- Token de protección CSRF -->
+                        {{form.csrf_token}}
+                        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+                        {{render_field(form.nombre_cliente, class='form-control')}}
                         <br>
                         {{render_field(form.cantidad_compradores, class='form-control')}}
                         <br>
@@ -48,7 +76,13 @@
                     <h5 class="card-title">Cantidad a cobrar</h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-text text-success" style="font-size: 50px; font-weight: bold;">{{mensaje}}</p>
+
+                    {% if pago.lower() == 'no se pudo realizar la venta' %}
+                    <p class="card-text text-danger" style="font-size: 50px; font-weight: bold;">Ha ocurrido un error</p>
+                    {% endif %}
+                    {% if pago.lower() != 'no se pudo realizar la venta' %}
+                    <p class="card-text text-success" style="font-size: 50px; font-weight: bold;">$ {{pago}} MX</p>
+                    {% endif %}
                 </div>
             </div>
         </div>

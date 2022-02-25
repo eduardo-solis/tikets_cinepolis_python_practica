@@ -4,7 +4,8 @@ from wtforms.validators import InputRequired, NumberRange, ValidationError
 
 class VentaForm(Form):
     
-    nombre = StringField('Nombre', validators=[InputRequired('Se requiere ingresar un nombre')])
+    #nombre_empleado = StringField('Nombre del empleado', validators=[InputRequired('Se requiere ingresar un nombre')])
+    nombre_cliente = StringField('Nombre del cliente', validators=[InputRequired('Se requiere ingresar un nombre')])
     cantidad_compradores = IntegerField('Cantidad de compradores', validators=[NumberRange(min=1, message='Se requiere por lo menos 1 comprador'), InputRequired('Se requiere ingresar un valor')])
     tarjeta_descuento = RadioField('Tarjeta de descuento', default='0',
                                 choices=[('1','Si'), ('0', 'No')])
