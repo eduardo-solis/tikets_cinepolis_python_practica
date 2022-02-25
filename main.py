@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
-from flask import flash
 import forms
+import venta
+
 
 app = Flask(__name__)
 
@@ -8,15 +9,24 @@ app = Flask(__name__)
 def index():
     
     venta_form = forms.VentaForm(request.form)
-    mensaje = ''
+    mensaje_venta = ''
+    
     if request.method == 'POST' and venta_form.validate():
         print(venta_form.nombre.data)
         print(venta_form.cantidad_compradores.data)
         print(venta_form.tarjeta_descuento.data)
         print(venta_form.cantidad_tikets.data)
         print(venta_form.fecha_venta.data)
+        
+        compradores = venta_form.cantidad_compradores.data
+        tikets = venta_form.cantidad_tikets.data
+        tarjeta = venta_form.tarjeta_descuento.data
+        
+        venta_class = venta.Venta(compradores, tikets, tarjeta)
+        
+        mensaje_venta = venta_class.realizarVenta()
     
-    return render_template('venta.html', form = venta_form, mensaje = mensaje)
+    return render_template('venta.html', form = venta_form, mensaje = mensaje_venta)
 
 @app.route('/consulta')
 def consulta():
