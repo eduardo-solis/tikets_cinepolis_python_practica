@@ -80,9 +80,13 @@
                     {% if pago.lower() == 'no se pudo realizar la venta' %}
                     <p class="card-text text-danger" style="font-size: 50px; font-weight: bold;">Ha ocurrido un error</p>
                     {% endif %}
-                    {% if pago.lower() != 'no se pudo realizar la venta' %}
+                    {% if pago.lower() != 'no se pudo realizar la venta' and pago.lower() != '' %}
                     <p class="card-text text-success" style="font-size: 50px; font-weight: bold;">$ {{pago}} MX</p>
                     {% endif %}
+                    {% if pago.lower() == '' %}
+                    <p class="card-text text-success" style="font-size: 50px; font-weight: bold;"></p>
+                    {% endif %}
+
                 </div>
             </div>
         </div>

@@ -4,7 +4,10 @@ from flask import Flask, render_template, request
 from flask_wtf import CSRFProtect
 # Libreria para mensajes flash
 from flask import flash
+# Libreria para cookies
+from flask import make_response
 
+# Clases desarrolladas
 import forms
 import venta
 
@@ -19,9 +22,18 @@ csrf = CSRFProtect(app)
 def page_not_found(e):
     return render_template('404.html'),404
 
+@app.before_request
+def before_request():
+    print('Paso 1')
+
+@app.after_request
+def after_request(response):
+    print('Paso 3')
+    return response
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    
+    print('Paso 2')
     venta_form = forms.VentaForm(request.form)
     pago_venta = ''
     
@@ -44,11 +56,16 @@ def index():
         
         flash(mensaje)
     
-    return render_template('venta.html', form = venta_form, pago = pago_venta)
+    response = make_response(render_template('venta.html', form = venta_form, pago = pago_venta))
+    response.set_cookie('nombre_empleado','Eduardo')
+    return response
+    
+    #return render_template('venta.html', form = venta_form, pago = pago_venta)
 
 @app.route('/consulta')
 def consulta():
-    return render_template('consulta.html')
+    nombre_empleado = request.cookies.get('nombre_empleado')
+    return render_template('consulta.html', empleado = nombre_empleado)
 
 if __name__=='__main__':
     app.run(debug=True, port=3000)
