@@ -1,9 +1,13 @@
+import json
+
 class Venta:
     
-    def __init__(self, compradores, tikets, descuento):
+    def __init__(self, compradores, tikets, descuento, fecha, cliente):
         self.compradores = compradores
         self.tikets = tikets
         self.descuento = descuento
+        self.fecha = fecha
+        self.cliente = cliente
     
     def realizarVenta(self):
         
@@ -12,9 +16,33 @@ class Venta:
             subtotal = self.tikets * 12
             cantidad_pagar = subtotal - (subtotal * descuento)
             
+            nombre_archivo = 'ventas.txt'
+            
+            try:
+                leer_archivo = open(nombre_archivo, 'r')
+                id = len(leer_archivo.readlines()) + 1
+                leer_archivo.close()
+            except:
+                id = 1
+            
+            escribir_archivo = open(nombre_archivo,'a')
+            
+            venta = {
+                'id' : id,
+                'nombre_cliente' : self.cliente,
+                'cantidad_compradores' : self.compradores,
+                'cantidad_tikets' : self.tikets,
+                'cantidad_pagar' : cantidad_pagar,
+                'fecha_venta' : str(self.fecha)
+            }
+            
+            escribir_archivo.write(json.dumps(venta) + '\n')
+            escribir_archivo.close()
+
             return str(cantidad_pagar)
         else:
             return 'No se pudo realizar la venta'
+    
     
     def obtenerDescuento(self):
         
@@ -47,3 +75,4 @@ class Venta:
             return True
         else:
             return False
+    

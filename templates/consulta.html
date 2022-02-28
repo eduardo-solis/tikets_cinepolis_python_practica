@@ -1,9 +1,93 @@
 {% extends 'plantilla.html' %}
 
 {% block content %}
+{% from '_macros.html' import render_field %}
 
 <h1>Consulta</h1>
 
-<p class="text-primary">{{empleado}}</p>
+<h2 class="text-dark" >Empleado:</h2>
+<h3 class="text-primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{empleado}}</h3>
+
+<br>
+<hr>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Formulario de consultas -->
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title" >Consulta</h5>
+                </div>
+                <div class="card-body">
+                    <form name="consulta" action="" method="POST" novalidate>
+
+                        <!-- Token de protección CSRF -->
+                        {{form.csrf_token}}
+                        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+                        <p class="card-text" >Tipo de consulta a realizar</p>
+                        {% for field in form.tipo_consulta %}
+                            <div class="form-check">
+                                <tr>
+                                    <td>{{ field(class='form-check-input') }}</td>
+                                    <td>{{ field.label(class='form-check-label') }}</td>
+                                </tr>
+                            </div>
+                        {% endfor %}
+                        <br>
+                        {{render_field(form.dias, class = 'form-select')}}
+                        <br>
+                        {{render_field(form.meses, class = 'form-select')}}
+
+                        <!-- Botón para enviar el formulario -->
+                        <div class="row mt-3">
+                            <button type="submit" class="btn btn-primary">Realizar consulta</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de la consulta -->
+        <div class="col">
+            
+            <table class="table table-hover text-center" >
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Tikets</th>
+                    <th>Pago</th>
+                </tr>
+            
+                {% for item in lista %}
+                    <tr>
+                        <td>{{item['id']}}</td>
+                        <td>{{item['fecha_venta']}}</td>
+                        <td>{{item['nombre_cliente']}}</td>
+                        <td>{{item['cantidad_tikets']}}</td>
+                        <td>{{item['cantidad_pagar']}}</td>
+                    </tr>
+                {% endfor %}
+                
+                {% if total == 0 %}
+                <tr>
+                    <td colspan="5" class="table-warning">Aun no hay ventas registradas</td>
+                </tr>
+                {% endif %}
+
+                {% if total != 0 %}
+                <tr class="table-info" >
+                    <th colspan="4" >Total de ventas</th>
+                    <th>{{total}}</th>
+                </tr>
+                {% endif %}
+
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

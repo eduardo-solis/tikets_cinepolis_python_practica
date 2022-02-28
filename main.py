@@ -6,10 +6,13 @@ from flask_wtf import CSRFProtect
 from flask import flash
 # Libreria para cookies
 from flask import make_response
+# Libreria para variables globales
+from flask import g
 
 # Clases desarrolladas
 import forms
 import venta
+import consultas
 
 
 app = Flask(__name__)
@@ -25,6 +28,7 @@ def page_not_found(e):
 @app.before_request
 def before_request():
     print('Paso 1')
+    
 
 @app.after_request
 def after_request(response):
@@ -33,17 +37,19 @@ def after_request(response):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    
     print('Paso 2')
     venta_form = forms.VentaForm(request.form)
     pago_venta = ''
-    
     if request.method == 'POST' and venta_form.validate():
         
         compradores = venta_form.cantidad_compradores.data
         tikets = venta_form.cantidad_tikets.data
         tarjeta = venta_form.tarjeta_descuento.data
+        fecha = venta_form.fecha_venta.data
+        cliente = venta_form.nombre_cliente.data
         
-        venta_class = venta.Venta(compradores, tikets, tarjeta)
+        venta_class = venta.Venta(compradores, tikets, tarjeta, fecha, cliente)
         
         pago_venta = venta_class.realizarVenta()
         
@@ -59,13 +65,27 @@ def index():
     response = make_response(render_template('venta.html', form = venta_form, pago = pago_venta))
     response.set_cookie('nombre_empleado','Eduardo')
     return response
-    
-    #return render_template('venta.html', form = venta_form, pago = pago_venta)
 
-@app.route('/consulta')
+@app.route('/consulta', methods = ['GET', 'POST'])
 def consulta():
+    
+    consulta_form = forms.ConsultaForm(request.form)
     nombre_empleado = request.cookies.get('nombre_empleado')
-    return render_template('consulta.html', empleado = nombre_empleado)
+    lista = []
+    total = 0
+    
+    if request.method == 'POST' and consulta_form.validate():
+        
+        dia = consulta_form.dias.data
+        mes = consulta_form.meses.data
+        tipo_consulta = consulta_form.tipo_consulta.data
+        
+        consulta_class = consultas.Consulta(dia, mes, tipo_consulta)
+        lista = consulta_class.realizarConsulta()
+        total = consulta_class.obtener_totalVentas(lista)
+        #lista = consulta_class.consultarVentasMes()
+    
+    return render_template('consulta.html', form = consulta_form, empleado = nombre_empleado, lista = lista, total = total)
 
 if __name__=='__main__':
     app.run(debug=True, port=3000)

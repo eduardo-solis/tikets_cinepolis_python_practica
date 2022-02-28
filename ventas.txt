@@ -1,0 +1,5 @@
+{"id": 1, "nombre_cliente": "Eduardo", "cantidad_compradores": 1, "cantidad_tikets": 3, "cantidad_pagar": 28.8, "fecha_venta": "2022-02-10"}
+{"id": 2, "nombre_cliente": "Fernando", "cantidad_compradores": 1, "cantidad_tikets": 2, "cantidad_pagar": 24, "fecha_venta": "2022-02-10"}
+{"id": 3, "nombre_cliente": "Sandra", "cantidad_compradores": 2, "cantidad_tikets": 2, "cantidad_pagar": 21.6, "fecha_venta": "2022-02-14"}
+{"id": 4, "nombre_cliente": "Uriel", "cantidad_compradores": 4, "cantidad_tikets": 4, "cantidad_pagar": 43.2, "fecha_venta": "2022-02-14"}
+{"id": 5, "nombre_cliente": "Roberto", "cantidad_compradores": 1, "cantidad_tikets": 2, "cantidad_pagar": 21.6, "fecha_venta": "2022-02-16"}
